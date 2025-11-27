@@ -260,18 +260,51 @@ fun AdaptiveRecommendationScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Button(
+    /*        Button(
                 onClick = onStartWorkout,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Start Workout")
+            }*/
+
+            Button(
+                onClick = onStartWorkout,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6EA4FF)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp)
+                    .clip(RoundedCornerShape(25.dp))
+            ) {
+                Text("Start Workout", color = Color.White)
+                Spacer(Modifier.width(8.dp))
+                Text("→", color = Color.White)
             }
 
+
+
+/*
             OutlinedButton(
                 onClick = onTryEasier,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Something Easier")
+            }*/
+
+            Button(
+                onClick = onTryEasier,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFf59c85)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp)
+                    .clip(RoundedCornerShape(25.dp))
+            ) {
+                Text("Something Easier", color = Color.White)
+                Spacer(Modifier.width(8.dp))
+                Text("→", color = Color.White)
             }
         }
     }
@@ -304,34 +337,6 @@ fun WorkoutExercise(name: String, duration: String) {
     }
 }
 
-@Composable
-fun BottomNavBar() {
-    var selectedItem by remember { mutableStateOf(0) }
-
-    val items = listOf(
-        NavItem("Explore", Icons.Outlined.CompassCalibration),
-        NavItem("Create", Icons.Outlined.Add),
-        NavItem("Progress", Icons.Outlined.BarChart),
-        NavItem("Profile", Icons.Outlined.Person),
-        NavItem("Help", Icons.Outlined.MenuBook)
-    )
-
-    NavigationBar {
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = selectedItem == index,
-                onClick = { selectedItem = index },
-                icon = { Icon(item.icon, contentDescription = item.label) },
-                label = { Text(item.label) }
-            )
-        }
-    }
-}
-
-data class NavItem(
-    val label: String,
-    val icon: ImageVector
-)
 
 
 
