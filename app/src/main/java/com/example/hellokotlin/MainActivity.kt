@@ -22,6 +22,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -47,7 +49,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.vector.ImageVector
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material3.Icon
+
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Person
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -237,7 +249,8 @@ fun AdaptiveRecommendationScreen(
     onTryEasier: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Adaptive Recommendation") }) }
+        topBar = { TopAppBar(title = { Text("Adaptive Recommendation") }) },
+        bottomBar = { BottomBar() }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -336,6 +349,53 @@ fun WorkoutExercise(name: String, duration: String) {
         }
     }
 }
+
+@Composable
+fun BottomBar() {
+    NavigationBar {
+        NavigationBarItem(
+            selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(Icons.Outlined.Explore, contentDescription = "Explore") },
+            label = { Text("Explore") }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(Icons.Outlined.Add, contentDescription = "Create") },
+            label = { Text("Create") }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(Icons.Outlined.BarChart, contentDescription = "Progress") },
+            label = { Text("Progress") }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(Icons.Outlined.Person, contentDescription = "Profile") },
+            label = { Text("Profile") }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(Icons.Outlined.Book, contentDescription = "Help") },
+            label = { Text("Help") }
+        )
+    }
+}
+
+
+data class NavItem(
+    val label: String,
+    val icon: ImageVector
+)
+
 
 
 
