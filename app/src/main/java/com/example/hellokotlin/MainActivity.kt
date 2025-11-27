@@ -132,69 +132,74 @@ fun MoodCheckInScreen(onContinue: () -> Unit = {}) {
     val neutralEmoji = "😐"
     val happyEmoji = "😊"
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Spacer(Modifier.height(24.dp))
-
-        Text("Mood Check-In", style = MaterialTheme.typography.headlineSmall)
-
-        Spacer(Modifier.height(8.dp))
-
-        Text("How are you feeling today?", color = Color.Gray)
-
-        Spacer(Modifier.height(32.dp))
-
-        // --- ENERGY ---
-        MoodSliderRow(
-            label = "Energy",
-            value = energy,
-            onValueChange = { energy = it },
-            startEmoji = sadEmoji,
-            endEmoji = happyEmoji
-        )
-
-        Spacer(Modifier.height(20.dp))
-
-        // --- MOOD ---
-        MoodSliderRow(
-            label = "Mood",
-            value = mood,
-            onValueChange = { mood = it },
-            startEmoji = neutralEmoji,
-            endEmoji = happyEmoji
-        )
-
-        Spacer(Modifier.height(20.dp))
-
-        // --- SORENESS ---
-        MoodSliderRow(
-            label = "Soreness",
-            value = soreness,
-            onValueChange = { soreness = it },
-            startEmoji = sadEmoji,
-            endEmoji = happyEmoji
-        )
-
-        Spacer(Modifier.height(40.dp))
-
-        Button(
-            onClick = onContinue,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF6EA4FF)
-            ),
+    Scaffold(
+        //topBar = { TopAppBar(title = { Text("Adaptive Recommendation") }) },
+        bottomBar = { BottomBar() }
+    ) { padding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp)
-                .clip(RoundedCornerShape(25.dp))
+                .fillMaxSize()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Continue", color = Color.White)
-            Spacer(Modifier.width(8.dp))
-            Text("→", color = Color.White)
+
+            Spacer(Modifier.height(24.dp))
+
+            Text("Mood Check-In", style = MaterialTheme.typography.headlineSmall)
+
+            Spacer(Modifier.height(8.dp))
+
+            Text("How are you feeling today?", color = Color.Gray)
+
+            Spacer(Modifier.height(32.dp))
+
+            // --- ENERGY ---
+            MoodSliderRow(
+                label = "Energy",
+                value = energy,
+                onValueChange = { energy = it },
+                startEmoji = sadEmoji,
+                endEmoji = happyEmoji
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            // --- MOOD ---
+            MoodSliderRow(
+                label = "Mood",
+                value = mood,
+                onValueChange = { mood = it },
+                startEmoji = neutralEmoji,
+                endEmoji = happyEmoji
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            // --- SORENESS ---
+            MoodSliderRow(
+                label = "Soreness",
+                value = soreness,
+                onValueChange = { soreness = it },
+                startEmoji = sadEmoji,
+                endEmoji = happyEmoji
+            )
+
+            Spacer(Modifier.height(40.dp))
+
+            Button(
+                onClick = onContinue,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6EA4FF)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp)
+                    .clip(RoundedCornerShape(25.dp))
+            ) {
+                Text("Continue", color = Color.White)
+                Spacer(Modifier.width(8.dp))
+                Text("→", color = Color.White)
+            }
         }
     }
 }
