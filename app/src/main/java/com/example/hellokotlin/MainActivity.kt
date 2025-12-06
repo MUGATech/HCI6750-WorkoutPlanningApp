@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -57,6 +59,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material3.Icon
+import androidx.compose.material.icons.filled.Star
 
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.BarChart
@@ -469,7 +472,7 @@ fun WorkoutScreen(
                 Button(
                     onClick = { /* Pause logic */ },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFBFD9FF)
+                        containerColor = Color(0xFF69A8FF)
                     ),
                     shape = RoundedCornerShape(20.dp)
                 ) {
@@ -559,6 +562,7 @@ fun WorkoutCompleteScreen(
     onDone: () -> Unit = {}
 )
 {
+    var rating by remember { mutableStateOf(0) }
     Scaffold(
         topBar = { TopAppBar(title = { Text("Workout Summary") }) },
         bottomBar = { BottomBar() },
@@ -590,6 +594,20 @@ fun WorkoutCompleteScreen(
                     Text("😊", fontSize = 28.sp)
                 }
             )
+
+
+            Spacer(Modifier.height(60.dp))
+
+            Text("Rate Your Workout", fontSize = 22.sp)
+            Spacer(Modifier.height(16.dp))
+            StarRating(
+                rating = rating,
+                onRatingChanged = { rating = it }
+            )
+
+            Spacer(Modifier.height(16.dp))
+            Text("You rated: $rating stars")
+
             Spacer(Modifier.height(40.dp))
             // Buttons
             Button(
@@ -647,6 +665,26 @@ fun InfoItem(
     }
 }
 
+@Composable
+fun StarRating(
+    rating: Int,
+    onRatingChanged: (Int) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        for (star in 1..5) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = "Rate $star stars",
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable { onRatingChanged(star) },
+                tint = if (star <= rating) Color(0xFFFFC107) else Color.Gray
+            )
+        }
+    }
+}
 
 data class NavItem(
     val label: String,
