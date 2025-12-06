@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,6 +53,8 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.vector.ImageVector
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material3.Icon
 
@@ -60,6 +63,7 @@ import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.ui.text.style.TextAlign
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,11 +88,28 @@ class MainActivity : ComponentActivity() {
                     }
 
                     //composable("next_screen") {
-                        composable("AdaptiveRecommendation_Screen") {
+                    composable("AdaptiveRecommendation_Screen") {
                         //NextScreen()
                         AdaptiveRecommendationScreen(
-                            onStartWorkout = { navController.navigate(Screen.Workout.route) },
-                            onTryEasier = { /* logic */ }
+                            onStartWorkout = { navController.navigate("WorkoutScreen_Screen") },
+                            onTryEasier = { /* logic */ },
+
+                            )
+
+                    }
+
+
+                    composable("WorkoutScreen_Screen") {
+                        //NextScreen()
+                        WorkoutScreen(
+                            onWorkoutComplete = { navController.navigate("WorkoutCompleteScreen_Screen") }
+                        )
+                    }
+
+
+                    composable("WorkoutCompleteScreen_Screen") {
+                        //NextScreen()
+                        WorkoutCompleteScreen(
 
                         )
                     }
@@ -268,22 +289,22 @@ fun AdaptiveRecommendationScreen(
 
             // Workout metadata
             WorkoutDetailRow("Intensity", "Moderate")
-            WorkoutDetailRow("Duration", "22 minutes")
+            WorkoutDetailRow("Duration", "30 minutes")
             WorkoutDetailRow("Focus", "Full Body")
 
             // Exercise list
-            WorkoutExercise("Squats", "45 sec")
-            WorkoutExercise("Push-ups", "30 sec")
-            WorkoutExercise("Plank", "20 sec")
+            WorkoutExercise("Squats", "10 min")
+            WorkoutExercise("Push-ups", "10 min")
+            WorkoutExercise("Plank", "10 min")
 
             Spacer(modifier = Modifier.weight(1f))
 
-    /*        Button(
-                onClick = onStartWorkout,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Start Workout")
-            }*/
+            /*        Button(
+                        onClick = onStartWorkout,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Start Workout")
+                    }*/
 
             Button(
                 onClick = onStartWorkout,
@@ -301,14 +322,13 @@ fun AdaptiveRecommendationScreen(
             }
 
 
-
-/*
-            OutlinedButton(
-                onClick = onTryEasier,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Something Easier")
-            }*/
+            /*
+                        OutlinedButton(
+                            onClick = onTryEasier,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Something Easier")
+                        }*/
 
             Button(
                 onClick = onTryEasier,
@@ -392,6 +412,238 @@ fun BottomBar() {
             icon = { Icon(Icons.Outlined.Book, contentDescription = "Help") },
             label = { Text("Help") }
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WorkoutScreen(
+    onWorkoutComplete: () -> Unit
+
+) {
+
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("During Workout") }) },
+        bottomBar = { BottomBar() },
+        /*modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)*/
+    )
+    { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+
+            Spacer(modifier = Modifier.height(0.dp))
+
+            /*Text(
+                text = "During Workout",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )*/
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Push-ups",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "00:20 / 00:30",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(
+                    onClick = { /* Pause logic */ },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFBFD9FF)
+                    ),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Pause,
+                        contentDescription = "Pause"
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Pause")
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = { /* Skip logic */ },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF69A8FF)
+                    ),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "Skip"
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Skip")
+                }
+            }
+
+
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Button(
+                onClick = onWorkoutComplete,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6EA4FF)
+                ),
+                modifier = Modifier
+                    //.fillMaxWidth()
+                    .width(width = 300.dp)
+                    .height(52.dp)
+                    .clip(RoundedCornerShape(25.dp))
+            ) {
+                Text("Finish Workout", color = Color.White)
+                Spacer(Modifier.width(8.dp))
+                Text("→", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Text(
+                text = "Feeling Struggled?",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFf59c85)
+                ),
+                modifier = Modifier
+                    //  .fillMaxWidth()
+                    .width(width = 300.dp)
+                    .height(52.dp)
+                    .clip(RoundedCornerShape(25.dp))
+            ) {
+                Text("Suggest Easier Move", color = Color.White)
+                Spacer(Modifier.width(8.dp))
+                Text("→", color = Color.White)
+            }
+        }
+    }
+
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WorkoutCompleteScreen(
+    totalTime: String = "20 min",
+    exerciseCount: Int = 3,
+    onSaveTemplate: () -> Unit = {},
+    onDone: () -> Unit = {}
+)
+{
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Workout Summary") }) },
+        bottomBar = { BottomBar() },
+        /*modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)*/
+    )
+    { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Workout Complete!",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(Modifier.height(32.dp))
+            InfoItem(label = "Total time:", value = totalTime)
+            InfoItem(label = "Exercise:", value = exerciseCount.toString())
+            InfoItem(
+                label = "Moderate:",
+                valueComposable = {
+                    Text("😊", fontSize = 28.sp)
+                }
+            )
+            Spacer(Modifier.height(40.dp))
+            // Buttons
+            Button(
+                onClick = onSaveTemplate,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFFA89B)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                Text("Save as Template", fontWeight = FontWeight.SemiBold)
+            }
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = onDone,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF76A8FF)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                Text("Done", fontWeight = FontWeight.SemiBold)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun InfoItem(
+    label: String,
+    value: String = "",
+    valueComposable: @Composable (() -> Unit)? = null
+
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp, horizontal = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Text("★", fontSize = 30.sp, color = Color(0xFF4A72FF))
+        Spacer(Modifier.width(8.dp))
+        Text(label, fontSize = 18.sp)
+        Spacer(Modifier.width(4.dp))
+        if (valueComposable != null) {
+            valueComposable()
+        } else {
+
+            Text(value, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+        }
     }
 }
 
