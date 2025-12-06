@@ -2,9 +2,12 @@ package com.example.hellokotlin
 
 import ads_mobile_sdk.h5
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -66,6 +69,10 @@ import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 
 class MainActivity : ComponentActivity() {
@@ -459,10 +466,20 @@ fun WorkoutScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            var timeLeft by remember { mutableStateOf(45) }
+/*
+            CircularTimerDial(
+                totalTime = 60,
+                timeLeft = timeLeft
+            )*/
+
+            CountdownCircularTimer(totalTime = 60_000L) // 60 seconds
+
+           /* Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "00:20 / 00:30",
                 style = MaterialTheme.typography.titleMedium
-            )
+            )*/
 
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -522,7 +539,7 @@ fun WorkoutScreen(
                 Text("→", color = Color.White)
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             Text(
                 text = "Feeling Struggled?",
@@ -684,6 +701,120 @@ fun StarRating(
             )
         }
     }
+}
+
+
+@Composable
+fun CircularTimerDial(
+    totalTime: Int = 20,   // total time in seconds
+    timeLeft: Int = 10     // time remaining in seconds
+) {
+    val progress = timeLeft / totalTime.toFloat()
+
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        label = "timer-progress"
+    )
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(200.dp)
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+
+            // Background circle
+            drawArc(
+                color = Color.LightGray,
+                startAngle = -90f,
+                sweepAngle = 360f,
+                useCenter = false,
+                style = Stroke(width = 18f, cap = StrokeCap.Round)
+            )
+
+            // Progress arc
+            drawArc(
+                color = Color(0xFF4A72FF),
+                startAngle = -90f,
+                sweepAngle = animatedProgress * 360f,
+                useCenter = false,
+                style = Stroke(width = 18f, cap = StrokeCap.Round)
+            )
+        }
+
+        // Time label in center
+        Text(
+            text = formatTime(timeLeft),
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+    }
+}
+
+
+@Composable
+fun CountdownCircularTimer(
+    totalTime: Long = 600_000L // total time in milliseconds
+) {
+    var timeLeft by remember { mutableStateOf(totalTime) }
+
+    // Start the timer once
+    LaunchedEffect(Unit) {
+        object : CountDownTimer(totalTime, 10L) { // updates every 100ms
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeft = millisUntilFinished
+            }
+
+            override fun onFinish() {
+                timeLeft = 0
+            }
+        }.start()
+    }
+
+    val progress = timeLeft / totalTime.toFloat()
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        label = "timer-progress"
+    )
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(200.dp)
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            // Background circle
+            drawArc(
+                color = Color.LightGray,
+                startAngle = -90f,
+                sweepAngle = 360f,
+                useCenter = false,
+                style = Stroke(width = 18f, cap = StrokeCap.Round)
+            )
+
+            // Foreground (progress) arc
+            drawArc(
+                color = Color(color = 0xFF87B972 ),
+                startAngle = -90f,
+                sweepAngle = animatedProgress * 360f,
+                useCenter = false,
+                style = Stroke(width = 18f, cap = StrokeCap.Round)
+            )
+        }
+
+        // Time text in center
+        Text(
+            text = formatTime((timeLeft / 1000).toInt()),
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+    }
+}
+
+fun formatTime(seconds: Int): String {
+    val m = seconds / 60
+    val s = seconds % 60
+    return String.format("%02d:%02d", m, s)
 }
 
 
