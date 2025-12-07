@@ -519,7 +519,12 @@ fun WorkoutScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.height(20.dp))
 
+            Text(
+                text = "Up next: plank",
+                style = MaterialTheme.typography.bodyMedium
+            )
 
             Spacer(modifier = Modifier.height(40.dp))
 
